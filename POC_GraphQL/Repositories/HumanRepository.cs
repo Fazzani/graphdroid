@@ -31,5 +31,8 @@
 
         public Task<Human> GetHuman(Guid id, CancellationToken cancellationToken) =>
             Task.FromResult(Database.Humans.FirstOrDefault(x => x.Id == id));
+
+        public Task<List<Human>> GetHumans(CancellationToken cancellationToken) =>
+            Task.FromResult(Database.Humans);
     }
 }

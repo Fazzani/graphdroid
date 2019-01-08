@@ -1,6 +1,7 @@
 ﻿namespace POC_GraphQL.Queries
 {
     using System;
+    using System.Collections.Generic;
     using GraphQL.Types;
     using POC_GraphQL.Models;
     using POC_GraphQL.Repositories;
@@ -59,6 +60,10 @@
                 resolve: context => humanRepository.GetHuman(
                     context.GetArgument("id", defaultValue: new Guid("94fbd693-2027-4804-bf40-ed427fe76fda")),
                     context.CancellationToken));
+
+            this.FieldAsync<ListGraphType<HumanType>, List<Human>>(
+                "humans",                
+                resolve: context => humanRepository.GetHumans(context.CancellationToken));
         }
     }
 }

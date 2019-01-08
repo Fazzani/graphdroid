@@ -3,6 +3,14 @@
 ## Examples
 
 ```json
+{
+  __schema {
+    types {
+      name
+    }
+  }
+}
+
 query listHumans {
   human {
     id name 
@@ -24,10 +32,16 @@ mutation CreateHuman($humanInput: HumanInput!) {
   }
 }
 
+query AllHumans {
+  humans{
+    name
+  }
+}
+
 # variables
 {
   "humanInput": {"name": "test","homePlanet": "Terre"},
   "id": "1ae34c3b-c1a0-4b7b-9375-c5a221d49e68",
-  $withFriends: false
+  "withFriends": false
 }
 ```
