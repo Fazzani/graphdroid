@@ -1,5 +1,11 @@
 # GraphQL POC DROID
 
+## TODO
+
+- Filter/Search
+- Pagination
+- Cache
+
 ## Examples
 
 ```json
@@ -32,7 +38,7 @@ mutation CreateHuman($humanInput: HumanInput!) {
   }
 }
 
-query AllHumans {
+query AllHumans(first:1) {
   humans{
     name
   }

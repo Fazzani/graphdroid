@@ -47,11 +47,27 @@
             services.AddSingleton<RootQuery>();
             services.AddSingleton<RootMutation>();
             services.AddSingleton<RootSubscription>();
-            services.AddSingleton<HumanInputObject>();
-            services.AddSingleton<CharacterInterface>();
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
             var sp = services.BuildServiceProvider();
             services.AddSingleton<ISchema>(new MainSchema(new FuncDependencyResolver(type => sp.GetService(type))));
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+            app.UseGraphiQl();
+            app.UseHttpsRedirection();
+            app.UseMvc();
         }
 
         private static void RegisterGraphQLTypes(IServiceCollection services, System.Reflection.Assembly assembly)
@@ -61,6 +77,7 @@
                .Where(x => x.IsClass && x.IsPublic && (
                x.Name.EndsWith("InputObject") ||
                x.Name.EndsWith("CreatedEvent") ||
+               x.Name.EndsWith("Interface") ||
                x.Name.EndsWith("GType")));
 
             foreach (var type in types)
@@ -82,22 +99,5 @@
             }
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseGraphiQl();
-            app.UseHttpsRedirection();
-            app.UseMvc();
-        }
     }
 }
