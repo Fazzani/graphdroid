@@ -20,8 +20,9 @@
         public Task<Human> AddHuman(Human human, CancellationToken cancellationToken)
         {
             human.Id = Guid.NewGuid();
+            Console.WriteLine($"Creating new Human {human.Id}");
             Database.Humans.Add(human);
-            this.whenHumanCreated.OnNext(human);
+            whenHumanCreated.OnNext(human);
             return Task.FromResult(human);
         }
 
