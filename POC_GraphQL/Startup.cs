@@ -12,6 +12,7 @@
     using POC_GraphQL.Models;
     using POC_GraphQL.Queries;
     using POC_GraphQL.Repositories;
+    using System.Linq;
 
     public class Startup
     {
@@ -39,20 +40,46 @@
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddTransient<IHumanRepository, HumanRepository>();
-            services.AddTransient<IDroidRepository, DroidRepository>();
+            var assembly = typeof(IHumanRepository).Assembly; // I actually use Assembly.LoadFile with well-known names 
+            RegisterRepositories(services, assembly);
+            RegisterGraphQLTypes(services, assembly);
+
             services.AddSingleton<RootQuery>();
             services.AddSingleton<RootMutation>();
             services.AddSingleton<RootSubscription>();
             services.AddSingleton<HumanInputObject>();
-            services.AddSingleton<HumanCreatedEvent>();
-            services.AddSingleton<HumanType>();
-            services.AddSingleton<DroidType>();
-            services.AddSingleton<EpisodeType>();
             services.AddSingleton<CharacterInterface>();
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
             var sp = services.BuildServiceProvider();
             services.AddSingleton<ISchema>(new MainSchema(new FuncDependencyResolver(type => sp.GetService(type))));
+        }
+
+        private static void RegisterGraphQLTypes(IServiceCollection services, System.Reflection.Assembly assembly)
+        {
+            var types = assembly.ExportedTypes
+               // filter types that are unrelated
+               .Where(x => x.IsClass && x.IsPublic && (
+               x.Name.EndsWith("InputObject") ||
+               x.Name.EndsWith("CreatedEvent") ||
+               x.Name.EndsWith("GType")));
+
+            foreach (var type in types)
+            {
+                services.AddSingleton(type);
+            }
+        }
+
+        private static void RegisterRepositories(IServiceCollection services, System.Reflection.Assembly assembly)
+        {
+            var types = assembly.ExportedTypes
+               // filter types that are unrelated
+               .Where(x => x.IsClass && x.IsPublic && (
+               x.Name.EndsWith("Repository")));
+
+            foreach (var type in types)
+            {
+                services.AddSingleton(type.GetInterface($"I{type.Name}"), type);
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

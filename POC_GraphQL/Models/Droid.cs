@@ -9,9 +9,9 @@
         public string PrimaryFunction { get; set; }
     }
 
-    public class DroidType : ObjectGraphType<Droid>
+    public class DroidGType : ObjectGraphType<Droid>
     {
-        public DroidType(IDroidRepository droidRepository)
+        public DroidGType(IDroidRepository droidRepository)
         {
             Name = "Droid";
             Description = "A mechanical creature in the Star Wars universe.";
@@ -19,7 +19,7 @@
             Field(x => x.Id, type: typeof(IdGraphType)).Description("The unique identifier of the droid.");
             Field(x => x.Name).Description("The name of the droid.");
             Field(x => x.PrimaryFunction, nullable: true).Description("The primary function of the droid.");
-            Field<ListGraphType<EpisodeType>>(nameof(Droid.AppearsIn), "Which movie they appear in.");
+            Field<ListGraphType<EpisodeGType>>(nameof(Droid.AppearsIn), "Which movie they appear in.");
 
             FieldAsync<ListGraphType<CharacterInterface>, List<Character>>(
             nameof(Droid.Friends),

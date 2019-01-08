@@ -9,9 +9,9 @@
         public string HomePlanet { get; set; }
     }
 
-    public class HumanType : ObjectGraphType<Human>
+    public class HumanGType : ObjectGraphType<Human>
     {
-        public HumanType(IHumanRepository humanRepository)
+        public HumanGType(IHumanRepository humanRepository)
         {
             Name = "Human";
             Description = "A humanoid creature from the Star Wars universe.";
@@ -19,7 +19,7 @@
             Field(x => x.Id, type: typeof(IdGraphType)).Description("The unique identifier of the human.");
             Field(x => x.Name).Description("The name of the human.");
             Field(x => x.HomePlanet, nullable: true).Description("The home planet of the human.");
-            Field<ListGraphType<EpisodeType>>(nameof(Character.AppearsIn), "Which movie they appear in.");
+            Field<ListGraphType<EpisodeGType>>(nameof(Character.AppearsIn), "Which movie they appear in.");
 
             FieldAsync<ListGraphType<CharacterInterface>, List<Character>>(
                 nameof(Human.Friends),

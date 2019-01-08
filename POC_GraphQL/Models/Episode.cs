@@ -8,9 +8,9 @@
         JEDI = 6
     }
 
-    public class EpisodeType : EnumerationGraphType<Episode>
+    public class EpisodeGType : EnumerationGraphType<Episode>
     {
-        public EpisodeType()
+        public EpisodeGType()
         {
             Name = "Episode";
             Description = "One of the films in the Star Wars Trilogy.";

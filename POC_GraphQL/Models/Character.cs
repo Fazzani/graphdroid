@@ -20,7 +20,7 @@
 
             Field(x => x.Id, type: typeof(IdGraphType)).Description("The unique identifier of the character.");
             Field(x => x.Name, nullable: true).Description("The name of the character.");
-            Field<ListGraphType<EpisodeType>>(nameof(Character.AppearsIn), "Which movie they appear in.");
+            Field<ListGraphType<EpisodeGType>>(nameof(Character.AppearsIn), "Which movie they appear in.");
 
             Field<ListGraphType<CharacterInterface>>(
                 nameof(Character.Friends),

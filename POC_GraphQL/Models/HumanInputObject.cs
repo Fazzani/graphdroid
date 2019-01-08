@@ -11,7 +11,7 @@
 
             Field<NonNullGraphType<StringGraphType>>(nameof(Human.Name));
             Field<StringGraphType>(nameof(Human.HomePlanet));
-            Field<ListGraphType<EpisodeType>>(nameof(Human.AppearsIn), "Which movie they appear in.");
+            Field<ListGraphType<EpisodeGType>>(nameof(Human.AppearsIn), "Which movie they appear in.");
         }
     }
 }

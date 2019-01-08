@@ -37,7 +37,7 @@
             this.Name = "Query";
             this.Description = "The query type, represents all of the entry points into our object graph.";
 
-            this.FieldAsync<DroidType, Droid>(
+            this.FieldAsync<DroidGType, Droid>(
                 "droid",
                 arguments: new QueryArguments(
                     new QueryArgument<IdGraphType>
@@ -49,7 +49,7 @@
                     droidRepository.GetDroid(
                         context.GetArgument("id", defaultValue: new Guid("1ae34c3b-c1a0-4b7b-9375-c5a221d49e68")),
                         context.CancellationToken));
-            this.FieldAsync<HumanType, Human>(
+            this.FieldAsync<HumanGType, Human>(
                 "human",
                 arguments: new QueryArguments(
                     new QueryArgument<IdGraphType>()
@@ -61,7 +61,7 @@
                     context.GetArgument("id", defaultValue: new Guid("94fbd693-2027-4804-bf40-ed427fe76fda")),
                     context.CancellationToken));
 
-            this.FieldAsync<ListGraphType<HumanType>, List<Human>>(
+            this.FieldAsync<ListGraphType<HumanGType>, List<Human>>(
                 "humans",                
                 resolve: context => humanRepository.GetHumans(context.CancellationToken));
         }

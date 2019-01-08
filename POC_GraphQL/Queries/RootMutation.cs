@@ -28,7 +28,7 @@
             Name = "Mutation";
             Description = "The mutation type, represents all updates we can make to our data.";
 
-            FieldAsync<HumanType, Human>(
+            FieldAsync<HumanGType, Human>(
                 "createHuman",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<HumanInputObject>>()
