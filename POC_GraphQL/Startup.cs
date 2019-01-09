@@ -2,6 +2,8 @@
 {
     using GraphiQl;
     using GraphQL;
+    using GraphQL.DataLoader;
+    using GraphQL.Http;
     using GraphQL.Relay.Types;
     using GraphQL.Server;
     using GraphQL.Server.Ui.Playground;
@@ -11,6 +13,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using POC_GraphQL.Queries;
@@ -57,7 +60,14 @@
             services.AddSingleton<RootQuery>();
             services.AddSingleton<RootMutation>();
             services.AddSingleton<RootSubscription>();
+
+            //Adding DataLoader
+            services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
+            services.AddSingleton<DataLoaderDocumentListener>();
+
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
+            services.AddSingleton<IDocumentWriter, DocumentWriter>();
             var sp = services.BuildServiceProvider();
             services.AddSingleton(new MainSchema(new FuncDependencyResolver(type => sp.GetService(type))));
 

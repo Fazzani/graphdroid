@@ -17,7 +17,7 @@
 
         public IObservable<Human> WhenHumanCreated => this.whenHumanCreated.AsObservable();
 
-        public Task<Human> AddHuman(Human human, CancellationToken cancellationToken)
+        public Task<Human> AddAsync(Human human, CancellationToken cancellationToken)
         {
             human.Id = Guid.NewGuid();
             Console.WriteLine($"Creating new Human {human.Id}");
@@ -26,13 +26,16 @@
             return Task.FromResult(human);
         }
 
-        public Task<List<Character>> GetFriends(Human human, CancellationToken cancellationToken) =>
-            Task.FromResult(Database.Characters.Where(x => human.Friends != null && human.Friends.Contains(x.Id)).ToList());
+        public Task<ILookup<Guid,Character>> GetFriendsAsync(IEnumerable<Guid> humansId, CancellationToken cancellationToken) =>
+            Task.FromResult(Database.Characters.Where(x => humansId.Contains(x.Id)).ToLookup(d=>d.Id));
 
-        public Task<Human> GetHuman(Guid id, CancellationToken cancellationToken) =>
+        public Task<List<Character>> GetFriendsAsync(Human human, CancellationToken cancellationToken) =>
+           Task.FromResult(Database.Characters.Where(x => human.Friends != null && human.Friends.Contains(x.Id)).ToList());
+
+        public Task<Human> GetAsync(Guid id, CancellationToken cancellationToken) =>
             Task.FromResult(Database.Humans.FirstOrDefault(x => x.Id == id));
 
-        public Task<List<Human>> GetHumans(CancellationToken cancellationToken) =>
+        public Task<List<Human>> GetAll(CancellationToken cancellationToken) =>
             Task.FromResult(Database.Humans);
     }
 }

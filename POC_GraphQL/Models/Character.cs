@@ -1,9 +1,11 @@
 ﻿namespace POC_GraphQL.Models
 {
+    using GraphQL.Types;
+    using POC_GraphQL.Common;
     using System;
     using System.Collections.Generic;
-    using GraphQL.Types;
-    public abstract class Character
+
+    public abstract class Character : IId
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

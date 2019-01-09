@@ -39,7 +39,7 @@
                 resolve: context =>
                 {
                     var human = context.GetArgument<Human>("human");
-                    return humanRepository.AddHuman(human, context.CancellationToken);
+                    return humanRepository.AddAsync(human, context.CancellationToken);
                 });
         }
     }
