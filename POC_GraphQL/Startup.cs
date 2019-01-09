@@ -59,7 +59,7 @@
             services.AddSingleton<RootSubscription>();
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
             var sp = services.BuildServiceProvider();
-            services.AddSingleton<MainSchema>(new MainSchema(new FuncDependencyResolver(type => sp.GetService(type))));
+            services.AddSingleton(new MainSchema(new FuncDependencyResolver(type => sp.GetService(type))));
 
             services.AddGraphQL(options =>
             {
@@ -82,11 +82,9 @@
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseWebSockets();
-
-            app.UseGraphiQl();
 
             // this is required for websockets support
+            app.UseWebSockets();
 
             // use websocket middleware for ChatSchema at path /graphql
             app.UseGraphQLWebSockets<MainSchema>("/graphql");
@@ -100,11 +98,14 @@
             // use graphql-playground middleware at default url /ui/playground
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
 
+            // use GraphQLI middleware at default url /graphql
+            //app.UseGraphiQl();
+
             // use voyager middleware at default url /ui/voyager
             app.UseGraphQLVoyager(new GraphQLVoyagerOptions());
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            //app.UseMvc();
         }
 
         private static void RegisterGraphQLTypes(IServiceCollection services, System.Reflection.Assembly assembly)
