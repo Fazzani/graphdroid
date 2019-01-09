@@ -1,17 +1,18 @@
 ﻿namespace POC_GraphQL
 {
     using GraphiQl;
+    using GraphQL;
+    using GraphQL.Relay.Types;
+    using GraphQL.Types;
+    using GraphQL.Types.Relay;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using POC_GraphQL.Schemas;
-    using GraphQL;
-    using GraphQL.Types;
-    using POC_GraphQL.Models;
     using POC_GraphQL.Queries;
     using POC_GraphQL.Repositories;
+    using POC_GraphQL.Schemas;
     using System.Linq;
 
     public class Startup
@@ -44,6 +45,12 @@
             RegisterRepositories(services, assembly);
             RegisterGraphQLTypes(services, assembly);
 
+            //Adding GraphQL Relay services
+            services.AddTransient(typeof(ConnectionType<>));
+            services.AddTransient(typeof(EdgeType<>));
+            services.AddTransient<NodeInterface>();
+            services.AddTransient<PageInfoType>();
+            //Adding GraphQL services
             services.AddSingleton<RootQuery>();
             services.AddSingleton<RootMutation>();
             services.AddSingleton<RootSubscription>();

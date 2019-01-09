@@ -3,8 +3,9 @@
 ## TODO
 
 - Filter/Search
-- Pagination
+- Pagination/Cursor/Connection
 - Cache
+- Using the dataloader
 
 ## Examples
 
