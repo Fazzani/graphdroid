@@ -9,6 +9,10 @@
     <PackageReference Include="graphiql" Version="1.2.0" />
     <PackageReference Include="GraphQL" Version="2.4.0" />
     <PackageReference Include="GraphQL.Relay" Version="0.5.0" />
+    <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="3.3.0" />
+    <PackageReference Include="GraphQL.Server.Transports.WebSockets" Version="3.3.0" />
+    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="3.3.0" />
+    <PackageReference Include="GraphQL.Server.Ui.Voyager" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />

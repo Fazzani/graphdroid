@@ -3,6 +3,9 @@
     using GraphiQl;
     using GraphQL;
     using GraphQL.Relay.Types;
+    using GraphQL.Server;
+    using GraphQL.Server.Ui.Playground;
+    using GraphQL.Server.Ui.Voyager;
     using GraphQL.Types;
     using GraphQL.Types.Relay;
     using Microsoft.AspNetCore.Builder;
@@ -56,7 +59,15 @@
             services.AddSingleton<RootSubscription>();
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
             var sp = services.BuildServiceProvider();
-            services.AddSingleton<ISchema>(new MainSchema(new FuncDependencyResolver(type => sp.GetService(type))));
+            services.AddSingleton<MainSchema>(new MainSchema(new FuncDependencyResolver(type => sp.GetService(type))));
+
+            services.AddGraphQL(options =>
+            {
+                options.EnableMetrics = true;
+                options.ExposeExceptions = this._hostingEnvironment.IsDevelopment();
+            })
+            .AddWebSockets() // Add required services for web socket support
+            .AddDataLoader(); // Add required services for DataLoader support;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,8 +82,27 @@
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseWebSockets();
 
             app.UseGraphiQl();
+
+            // this is required for websockets support
+
+            // use websocket middleware for ChatSchema at path /graphql
+            app.UseGraphQLWebSockets<MainSchema>("/graphql");
+
+            // use HTTP middleware for MainSchema at path /graphql
+            app.UseGraphQL<MainSchema>("/graphql");
+
+            // use graphiQL middleware at default url /graphiql
+            //app.UseGraphiQLServer(new GraphiQLOptions());
+
+            // use graphql-playground middleware at default url /ui/playground
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
+
+            // use voyager middleware at default url /ui/voyager
+            app.UseGraphQLVoyager(new GraphQLVoyagerOptions());
+
             app.UseHttpsRedirection();
             app.UseMvc();
         }
