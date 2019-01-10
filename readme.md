@@ -22,7 +22,7 @@
 {
   __schema {
     types {
-      name
+      humans
     }
   }
 }
@@ -48,12 +48,6 @@ mutation CreateHuman($humanInput: HumanInput!) {
   }
 }
 
-query AllHumans(first:1) {
-  humans{
-    name
-  }
-}
-
 # pagination
 
 {
@@ -72,10 +66,10 @@ query AllHumans(first:1) {
   }
 }
 
-## Filter
+# Filter using [System.Linq.Dynamic.Core](https://github.com/StefH/System.Linq.Dynamic.Core)
 
 {
-  humans(first: 2, filter: "name.Contains(\"Dar\") && name.Length > 2") {
+  humans(first: 2, filter: "name.ToLower().Contains(\"dar\") && name.Length > 2") {
     totalCount
     pageInfo {
       endCursor
