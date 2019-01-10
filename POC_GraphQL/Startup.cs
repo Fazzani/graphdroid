@@ -8,7 +8,6 @@
     using GraphQL.Server.Ui.Playground;
     using GraphQL.Server.Ui.Voyager;
     using GraphQL.Types.Relay;
-    using GraphQL.Validation.Complexity;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;

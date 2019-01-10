@@ -60,6 +60,23 @@
                                                   Episode.EMPIRE,
                                                   Episode.JEDI, },
                 HomePlanet = "Tatooine"
+            },
+            new Human()
+            {
+                Id = new Guid("ee7bf389-2cfb-45f4-b91e-9d95441c1ecc"),
+                Name = "TOTO",
+                Friends = new List<Guid>(),
+                AppearsIn = new List<Episode>() { Episode.NEWHOPE,
+                                                  Episode.JEDI, },
+                HomePlanet = "Terre"
+            },
+            new Human()
+            {
+                Id = new Guid("cc7bf349-2cfb-45f4-b91e-9d95441c1ecc"),
+                Name = "FOFO",
+                Friends = new List<Guid>(),
+                AppearsIn = new List<Episode>() { Episode.JEDI, },
+                HomePlanet = "Neptune"
             }
         };
             Characters = Droids.AsEnumerable<Character>()

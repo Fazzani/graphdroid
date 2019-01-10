@@ -1,11 +1,12 @@
 # GraphQL POC DROID
 
-## TODO
+## Mise en pratique
 
-- Filter/Search
-- Pagination/Cursor/Connection
-- Cache
-- Using the dataloader
+- [x] Relay => Pagination/Cursor/Connection
+- [x] Using the dataloader
+- [x] Validation des queries
+- [ ] Filter/Search
+- [ ] Cache
 
 ## Examples
 
@@ -42,6 +43,24 @@ mutation CreateHuman($humanInput: HumanInput!) {
 query AllHumans(first:1) {
   humans{
     name
+  }
+}
+
+# pagination
+
+{
+  humans(first: 1) {
+    totalCount
+    pageInfo {
+      endCursor
+      startCursor
+    }
+    edges {
+      node {
+        homePlanet
+        name
+      }
+    }
   }
 }
 
