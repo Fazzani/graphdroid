@@ -28,7 +28,7 @@
                 .PageSize(10)
                 .ResolveAsync(async context =>
                 {
-                    var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, Character>("FreindsLoader", _humanRepository.GetFriendsAsync);
+                    var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, Character>("FriendsLoader", _humanRepository.GetFriendsAsync);
 
                     // IMPORTANT: In order to avoid deadlocking on the loader we use the following construct (next 2 lines):
                     var loadHandle = loader.LoadAsync(context.Source.Id);

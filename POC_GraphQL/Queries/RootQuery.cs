@@ -1,12 +1,10 @@
 ﻿namespace POC_GraphQL.Queries
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading;
+    using GraphQL.Relay.Types;
     using GraphQL.Types;
+    using POC_GraphQL.Common;
     using POC_GraphQL.Models;
     using POC_GraphQL.Repositories;
-    using POC_GraphQL.Common;
 
     /// <example>
     /// The is an example query to get a human and the details of their friends:
@@ -30,7 +28,7 @@
     ///   }
     /// }
     /// </example>
-    public class RootQuery : ObjectGraphType<object>
+    public class RootQuery : QueryGraphType
     {
         public RootQuery(
             IDroidRepository droidRepository,
@@ -39,20 +37,22 @@
 
             Connection<HumanGType>()
                .Name("humans")
+               //.Argument<HumanGType, string>("filter", "Filter", null)
                .Unidirectional()
                .PageSize(10)
                .ResolveAsync(async context =>
                {
-                   return await humanRepository.GetAll(CancellationToken.None).Result.ToConnection(context);
+                   return await humanRepository.GetAll(context.CancellationToken).Result.ToConnection(context);
                });
 
             Connection<DroidGType>()
               .Name("droids")
+               //.Argument<HumanGType, string>("filter", "Filter")
               .Unidirectional()
               .PageSize(10)
               .ResolveAsync(async context =>
               {
-                  return await droidRepository.GetAllAsync(CancellationToken.None).Result.ToConnection(context);
+                  return await droidRepository.GetAllAsync(context.CancellationToken).Result.ToConnection(context);
               });
 
             //this.Name = "Query";
