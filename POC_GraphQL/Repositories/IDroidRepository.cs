@@ -11,7 +11,6 @@
     {
         Task<Droid> GetAsync(Guid id, CancellationToken cancellationToken);
         Task<List<Droid>> GetAllAsync( CancellationToken cancellationToken);
-
         Task<List<Character>> GetFriendsAsync(Droid droid, CancellationToken cancellationToken);
         Task<ILookup<Guid, Character>> GetFriendsAsync(IEnumerable<Guid> humansId, CancellationToken cancellationToken);
     }
