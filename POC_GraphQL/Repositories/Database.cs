@@ -48,7 +48,7 @@
                 },
                 AppearsIn = new List<Episode>() { Episode.NEWHOPE,
                                                   Episode.EMPIRE,
-                                                  Episode.JEDI, },
+                                                   },
                 HomePlanet = "Tatooine"
             },
             new Human()
@@ -57,7 +57,6 @@
                 Name = "Darth Vader",
                 Friends = new List<Guid>(),
                 AppearsIn = new List<Episode>() { Episode.NEWHOPE,
-                                                  Episode.EMPIRE,
                                                   Episode.JEDI, },
                 HomePlanet = "Tatooine"
             },
