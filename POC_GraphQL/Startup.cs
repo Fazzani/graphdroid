@@ -1,6 +1,5 @@
 ﻿namespace POC_GraphQL
 {
-    using GraphiQl;
     using GraphQL;
     using GraphQL.DataLoader;
     using GraphQL.Http;
@@ -8,14 +7,15 @@
     using GraphQL.Server;
     using GraphQL.Server.Ui.Playground;
     using GraphQL.Server.Ui.Voyager;
-    using GraphQL.Types;
     using GraphQL.Types.Relay;
+    using GraphQL.Validation.Complexity;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Options;
     using POC_GraphQL.Queries;
     using POC_GraphQL.Repositories;
     using POC_GraphQL.Schemas;
@@ -47,6 +47,8 @@
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.Configure<GraphQLOptions>(_configuration.GetSection(nameof(GraphQLOptions)));
+
             var assembly = typeof(IHumanRepository).Assembly; // I actually use Assembly.LoadFile with well-known names 
             RegisterRepositories(services, assembly);
             RegisterGraphQLTypes(services, assembly);
@@ -70,12 +72,8 @@
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
             var sp = services.BuildServiceProvider();
             services.AddSingleton(new MainSchema(new FuncDependencyResolver(type => sp.GetService(type))));
-
-            services.AddGraphQL(options =>
-            {
-                options.EnableMetrics = true;
-                options.ExposeExceptions = this._hostingEnvironment.IsDevelopment();
-            })
+            var graphqlOptions = sp.GetService<IOptionsMonitor<GraphQLOptions>>();
+            services.AddGraphQL(graphqlOptions.CurrentValue)
             .AddWebSockets() // Add required services for web socket support
             .AddDataLoader(); // Add required services for DataLoader support;
         }
