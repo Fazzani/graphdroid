@@ -5,12 +5,18 @@
 - [x] Relay => Pagination/Cursor/Connection
 - [x] Using the dataloader
 - [x] Validation des queries
-- [ ] Filter/Search
+- [x] Filter
+- [ ] Multi Sort
 - [ ] Batching and caching (DataLoader)
 - [ ] Tests unitaires/Tests d'intégration
 - [ ] Authentication/[Authorization][Graph_authorization]
 
-## Examples
+## TO SEE
+
+- [field middleware](https://graphql-dotnet.github.io/docs/getting-started/field-middleware)
+- [Ef with GraphQL](https://hackernoon.com/how-to-implement-generic-queries-by-combining-entityframework-core-and-graphql-net-77ac8faf4a22)
+
+## Queries examples
 
 ```json
 {
@@ -23,7 +29,7 @@
 
 query listHumans {
   human {
-    id name 
+    id name
   }
 }
 
@@ -66,6 +72,24 @@ query AllHumans(first:1) {
   }
 }
 
+## Filter
+
+{
+  humans(first: 2, filter: "name.Contains(\"Dar\") && name.Length > 2") {
+    totalCount
+    pageInfo {
+      endCursor
+      startCursor
+    }
+    edges {
+      node {
+        homePlanet
+        name
+      }
+    }
+  }
+}
+
 # variables
 {
   "humanInput": {"name": "test","homePlanet": "Terre"},
@@ -74,12 +98,12 @@ query AllHumans(first:1) {
 }
 ```
 
-## Avantages
+## Advantages
 
 - Client First:
   - over fetching: est le surplus d'informations délivrées par la requête par rapport à la donnée désirée par le client.
   - under fetching: est le fait de devoir faire plusieurs appels à l'API pour compléter la réponse de notre premier appel qui ne contient pas assez d'informations
-- Introspection et documentation automatique
+- automatic introspection et documentation
 
 ## References
 

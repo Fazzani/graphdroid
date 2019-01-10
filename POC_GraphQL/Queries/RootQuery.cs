@@ -5,6 +5,9 @@
     using POC_GraphQL.Common;
     using POC_GraphQL.Models;
     using POC_GraphQL.Repositories;
+    using System;
+    using System.Linq;
+    using System.Linq.Dynamic.Core;
 
     /// <example>
     /// The is an example query to get a human and the details of their friends:
@@ -37,22 +40,33 @@
 
             Connection<HumanGType>()
                .Name("humans")
-               //.Argument<HumanGType, string>("filter", "Filter", null)
+               .Argument<StringGraphType>("filter", "Filter humans")
                .Unidirectional()
                .PageSize(10)
                .ResolveAsync(async context =>
                {
-                   return await humanRepository.GetAll(context.CancellationToken).Result.ToConnection(context);
+                   var filter = context.GetArgument<string>("filter");
+                   Console.WriteLine($"filter => {filter}");
+                   if (filter == null)
+                   {
+                       return await humanRepository.GetAll(context.CancellationToken).Result.ToConnection(context);
+                   }
+                   else
+                   {
+                       return await humanRepository.GetAll(context.CancellationToken).Result.AsQueryable().Where(filter).ToConnection(context);
+                   }
                });
 
             Connection<DroidGType>()
               .Name("droids")
-               //.Argument<HumanGType, string>("filter", "Filter")
+              .Argument<StringGraphType>("filter", "Filter droids")
               .Unidirectional()
               .PageSize(10)
               .ResolveAsync(async context =>
               {
-                  return await droidRepository.GetAllAsync(context.CancellationToken).Result.ToConnection(context);
+                  var filter = context.GetArgument<string>("filter");
+                  Console.WriteLine($"filter => {filter}");
+                  return await droidRepository.GetAllAsync(context.CancellationToken).Result.AsQueryable().Where(filter).ToConnection(context);
               });
 
             //this.Name = "Query";
