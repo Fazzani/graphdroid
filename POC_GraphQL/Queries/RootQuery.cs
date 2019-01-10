@@ -49,11 +49,11 @@
                    Console.WriteLine($"filter => {filter}");
                    if (filter == null)
                    {
-                       return await humanRepository.GetAll(context.CancellationToken).Result.ToConnection(context);
+                       return (await humanRepository.GetAll(context.CancellationToken)).ToConnection(context);
                    }
                    else
                    {
-                       return await humanRepository.GetAll(context.CancellationToken).Result.AsQueryable().Where(filter).ToConnection(context);
+                       return (await humanRepository.GetAll(context.CancellationToken)).AsQueryable().Where(filter).ToConnection(context);
                    }
                });
 
@@ -66,7 +66,14 @@
               {
                   var filter = context.GetArgument<string>("filter");
                   Console.WriteLine($"filter => {filter}");
-                  return await droidRepository.GetAllAsync(context.CancellationToken).Result.AsQueryable().Where(filter).ToConnection(context);
+                  if (filter == null)
+                  {
+                      return (await droidRepository.GetAllAsync(context.CancellationToken)).ToConnection(context);
+                  }
+                  else
+                  {
+                      return (await droidRepository.GetAllAsync(context.CancellationToken)).AsQueryable().Where(filter).ToConnection(context);
+                  }
               });
 
             //this.Name = "Query";
