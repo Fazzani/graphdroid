@@ -1,6 +1,6 @@
 # GraphQL POC DROID
 
-## Mise en pratique
+## To perform
 
 - [x] Relay => Pagination/Cursor/Connection
 - [x] Using the dataloader
@@ -11,8 +11,9 @@
 - [ ] Batching and caching (DataLoader)
 - [ ] Tests unitaires/Tests d'intégration
 - [ ] Authentication/[Authorization][Graph_authorization] => [UserContext][UserContext]
+- [ ] Perf/[Metrics][Metrics]
 
-## TO SEE
+## Have to see
 
 - [Field middleware](https://graphql-dotnet.github.io/docs/getting-started/field-middleware)
 - [Ef with GraphQL](https://hackernoon.com/how-to-implement-generic-queries-by-combining-entityframework-core-and-graphql-net-77ac8faf4a22)
@@ -124,3 +125,4 @@ query droit_pagination($first:Int){
 
 [Graph_authorization]:https://graphql-dotnet.github.io/docs/getting-started/authorization/
 [UserContext]:https://graphql-dotnet.github.io/docs/getting-started/user-context
+[Metrics]:https://graphql-dotnet.github.io/docs/getting-started/metrics
