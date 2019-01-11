@@ -43,19 +43,19 @@
                .Argument<StringGraphType>("filter", "Filter humans")
                .Unidirectional()
                .PageSize(10)
-               .Resolve(context =>
+               .ResolveAsync(async context =>
                {
                    var filter = context.GetArgument<string>("filter");
                    Console.WriteLine($"filter => {filter}");
                    if (filter == null)
                    {
-                       return humanRepository.GetAll(context.CancellationToken).Result.ToConnection(context);
-                       //return (await humanRepository.GetAll(context.CancellationToken)).ToConnection(context);
+                       var result = await humanRepository.GetAll(context.CancellationToken);
+                       return result.ToConnection(context);
                    }
                    else
                    {
-                       return humanRepository.GetAll(context.CancellationToken).Result.AsQueryable().Where(filter).ToConnection(context);
-                       //return (await humanRepository.GetAll(context.CancellationToken)).AsQueryable().Where(filter).ToConnection(context);
+                       var result = await humanRepository.GetAll(context.CancellationToken);
+                       return await result.AsQueryable().Where(filter).ToConnection(context);
                    }
                });
 
@@ -71,12 +71,12 @@
                   if (filter == null)
                   {
                       var result = await droidRepository.GetAllAsync(context.CancellationToken);
-                      return result.ToConnection(context);
+                      return await result.ToConnection(context);
                   }
                   else
                   {
                       var result = await droidRepository.GetAllAsync(context.CancellationToken);
-                      return result.AsQueryable().Where(filter).ToConnection(context);
+                      return await result.AsQueryable().Where(filter).ToConnection(context);
                   }
               });
 
