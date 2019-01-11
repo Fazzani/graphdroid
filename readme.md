@@ -6,6 +6,7 @@
 - [x] Using the dataloader
 - [x] Validation des queries
 - [x] Filter
+  - [ ] Nested queries
 - [ ] Multi Sort
 - [ ] Batching and caching (DataLoader)
 - [ ] Tests unitaires/Tests d'intégration
