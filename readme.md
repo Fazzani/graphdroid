@@ -10,7 +10,7 @@
 - [ ] Multi Sort
 - [ ] Batching and caching (DataLoader)
 - [ ] Tests unitaires/Tests d'intégration
-- [ ] Authentication/[Authorization][Graph_authorization]
+- [ ] Authentication/[Authorization][Graph_authorization] => [UserContext][UserContext]
 
 ## TO SEE
 
@@ -105,7 +105,7 @@ query droit_pagination($first:Int){
   "humanInput": {"name": "test","homePlanet": "Terre"},
   "id": "1ae34c3b-c1a0-4b7b-9375-c5a221d49e68",
   "withFriends": false,
-  "first":2
+  "first": 2
 }
 ```
 
@@ -123,3 +123,4 @@ query droit_pagination($first:Int){
 - [graphql fragments](https://medium.com/graphql-mastery/graphql-fragments-and-how-to-use-them-8ee30b44f59e)
 
 [Graph_authorization]:https://graphql-dotnet.github.io/docs/getting-started/authorization/
+[UserContext]:https://graphql-dotnet.github.io/docs/getting-started/user-context
