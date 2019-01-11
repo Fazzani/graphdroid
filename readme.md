@@ -85,6 +85,16 @@ mutation CreateHuman($humanInput: HumanInput!) {
   }
 }
 
+{
+  droids(first: 1) {
+    totalCount
+    edges {
+      node {
+        name
+      }
+    }
+  }
+}
 # variables
 {
   "humanInput": {"name": "test","homePlanet": "Terre"},

@@ -43,17 +43,19 @@
                .Argument<StringGraphType>("filter", "Filter humans")
                .Unidirectional()
                .PageSize(10)
-               .ResolveAsync(async context =>
+               .Resolve(context =>
                {
                    var filter = context.GetArgument<string>("filter");
                    Console.WriteLine($"filter => {filter}");
                    if (filter == null)
                    {
-                       return (await humanRepository.GetAll(context.CancellationToken)).ToConnection(context);
+                       return humanRepository.GetAll(context.CancellationToken).Result.ToConnection(context);
+                       //return (await humanRepository.GetAll(context.CancellationToken)).ToConnection(context);
                    }
                    else
                    {
-                       return (await humanRepository.GetAll(context.CancellationToken)).AsQueryable().Where(filter).ToConnection(context);
+                       return humanRepository.GetAll(context.CancellationToken).Result.AsQueryable().Where(filter).ToConnection(context);
+                       //return (await humanRepository.GetAll(context.CancellationToken)).AsQueryable().Where(filter).ToConnection(context);
                    }
                });
 
@@ -68,11 +70,13 @@
                   Console.WriteLine($"filter => {filter}");
                   if (filter == null)
                   {
-                      return (await droidRepository.GetAllAsync(context.CancellationToken)).ToConnection(context);
+                      var result = await droidRepository.GetAllAsync(context.CancellationToken);
+                      return result.ToConnection(context);
                   }
                   else
                   {
-                      return (await droidRepository.GetAllAsync(context.CancellationToken)).AsQueryable().Where(filter).ToConnection(context);
+                      var result = await droidRepository.GetAllAsync(context.CancellationToken);
+                      return result.AsQueryable().Where(filter).ToConnection(context);
                   }
               });
 

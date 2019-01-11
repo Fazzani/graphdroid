@@ -37,8 +37,8 @@
         /// Staging or Production by default. See http://docs.asp.net/en/latest/fundamentals/environments.html</param>
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
-            this._configuration = configuration;
-            this._hostingEnvironment = hostingEnvironment;
+            _configuration = configuration;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IConfiguration Configuration { get; }
