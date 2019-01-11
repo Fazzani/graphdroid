@@ -14,7 +14,7 @@
 
 ## TO SEE
 
-- [field middleware](https://graphql-dotnet.github.io/docs/getting-started/field-middleware)
+- [Field middleware](https://graphql-dotnet.github.io/docs/getting-started/field-middleware)
 - [Ef with GraphQL](https://hackernoon.com/how-to-implement-generic-queries-by-combining-entityframework-core-and-graphql-net-77ac8faf4a22)
 
 ## Queries examples

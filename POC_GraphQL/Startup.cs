@@ -8,6 +8,7 @@
     using GraphQL.Server.Ui.Playground;
     using GraphQL.Server.Ui.Voyager;
     using GraphQL.Types.Relay;
+    using GraphQL.Validation;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@
     using POC_GraphQL.Queries;
     using POC_GraphQL.Repositories;
     using POC_GraphQL.Schemas;
+    using POC_GraphQL.ValidationRules;
     using System.Linq;
 
     public class Startup
@@ -61,7 +63,7 @@
             services.AddSingleton<RootQuery>();
             services.AddSingleton<RootMutation>();
             services.AddSingleton<RootSubscription>();
-
+            services.AddSingleton<IValidationRule, DebugValidationRule>();
             //Adding DataLoader
             services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
             services.AddSingleton<DataLoaderDocumentListener>();
