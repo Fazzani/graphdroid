@@ -85,11 +85,16 @@ mutation CreateHuman($humanInput: HumanInput!) {
   }
 }
 
-{
-  droids(first: 1) {
+query droit_pagination($first:Int){
+  droids(first: $first, filter: "name.ToLower().Contains(\"d\") && name.Length > 2") {
     totalCount
+    pageInfo {
+      endCursor
+      startCursor
+    }
     edges {
       node {
+        id
         name
       }
     }
@@ -99,7 +104,8 @@ mutation CreateHuman($humanInput: HumanInput!) {
 {
   "humanInput": {"name": "test","homePlanet": "Terre"},
   "id": "1ae34c3b-c1a0-4b7b-9375-c5a221d49e68",
-  "withFriends": false
+  "withFriends": false,
+  "first":2
 }
 ```
 

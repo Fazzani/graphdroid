@@ -7,6 +7,7 @@
     using GraphQL.Server;
     using GraphQL.Server.Ui.Playground;
     using GraphQL.Server.Ui.Voyager;
+    using GraphQL.Types;
     using GraphQL.Types.Relay;
     using GraphQL.Validation;
     using Microsoft.AspNetCore.Builder;
@@ -24,9 +25,8 @@
 
     public class Startup
     {
-
-        private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _hostingEnvironment;
+        public IConfiguration Configuration { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
@@ -37,18 +37,16 @@
         /// Staging or Production by default. See http://docs.asp.net/en/latest/fundamentals/environments.html</param>
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
-            _configuration = configuration;
+            Configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.Configure<GraphQLOptions>(_configuration.GetSection(nameof(GraphQLOptions)));
+            services.Configure<GraphQLOptions>(Configuration.GetSection(nameof(GraphQLOptions)));
 
             var assembly = typeof(IHumanRepository).Assembly; // I actually use Assembly.LoadFile with well-known names 
             RegisterRepositories(services, assembly);
@@ -63,6 +61,7 @@
             services.AddSingleton<RootQuery>();
             services.AddSingleton<RootMutation>();
             services.AddSingleton<RootSubscription>();
+            //Custom validation rules
             services.AddSingleton<IValidationRule, DebugValidationRule>();
             //Adding DataLoader
             services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
@@ -73,10 +72,13 @@
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
             var sp = services.BuildServiceProvider();
             services.AddSingleton(new MainSchema(new FuncDependencyResolver(type => sp.GetService(type))));
+            services.AddSingleton<ISchema>(new MainSchema(new FuncDependencyResolver(type => sp.GetService(type))));
+
             var graphqlOptions = sp.GetService<IOptionsMonitor<GraphQLOptions>>();
-            services.AddGraphQL(graphqlOptions.CurrentValue)
-            .AddWebSockets() // Add required services for web socket support
-            .AddDataLoader(); // Add required services for DataLoader support;
+            services
+                .AddGraphQL(graphqlOptions.CurrentValue)
+                .AddWebSockets() // Add required services for web socket support
+                .AddDataLoader(); // Add required services for DataLoader support;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,7 +101,7 @@
             app.UseGraphQLWebSockets<MainSchema>("/graphql");
 
             // use HTTP middleware for MainSchema at path /graphql
-            app.UseGraphQL<MainSchema>("/graphql");
+            //app.UseGraphQL<MainSchema>("/graphql");
 
             // use graphiQL middleware at default url /graphiql
             //app.UseGraphiQLServer(new GraphiQLOptions());
@@ -114,7 +116,7 @@
             app.UseGraphQLVoyager(new GraphQLVoyagerOptions());
 
             app.UseHttpsRedirection();
-            //app.UseMvc();
+            app.UseMvc();
         }
 
         private static void RegisterGraphQLTypes(IServiceCollection services, System.Reflection.Assembly assembly)
