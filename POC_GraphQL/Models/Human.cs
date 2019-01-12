@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading;
+    using GraphQL.Authorization;
     using GraphQL.DataLoader;
     using GraphQL.Relay.Types;
     using GraphQL.Types;
@@ -37,7 +38,6 @@
                     return await result.ToConnection(context);
                 });
 
-
             Name = "Human";
             Description = "A humanoid creature from the Star Wars universe.";
 
@@ -52,6 +52,8 @@
                 resolve: context => _humanRepository.GetFriendsAsync(context.Source, context.CancellationToken));
 
             Interface<CharacterInterface>();
+            //Authorization on entire Type
+            this.AuthorizeWith("AdminPolicy");
         }
         
         public override Human GetById(string id)

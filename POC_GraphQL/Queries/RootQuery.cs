@@ -1,5 +1,6 @@
 ﻿namespace POC_GraphQL.Queries
 {
+    using GraphQL.Authorization;
     using GraphQL.Relay.Types;
     using GraphQL.Types;
     using POC_GraphQL.Common;
@@ -31,6 +32,7 @@
     ///   }
     /// }
     /// </example>
+    [GraphQLAuthorize(Policy = "AdminPolicy")]
     public class RootQuery : QueryGraphType
     {
         public RootQuery(

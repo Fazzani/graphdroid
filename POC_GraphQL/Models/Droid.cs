@@ -8,6 +8,9 @@
     using System;
     using System.Collections.Generic;
     using System.Threading;
+    using System.Linq;
+    using GraphQL.Validation;
+    using GraphQL.Authorization;
 
     public class Droid : Character
     {
@@ -21,7 +24,6 @@
         public DroidGType(IDroidRepository droidRepository, IDataLoaderContextAccessor dataLoader)
         {
             _droidRepository = droidRepository;
-
             Connection<DroidGType>()
              .Name("droids")
              .Unidirectional()
@@ -30,8 +32,8 @@
              {
                  var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, Character>("FriendsLoader", _droidRepository.GetFriendsAsync);
 
-                    // IMPORTANT: In order to avoid deadlocking on the loader we use the following construct (next 2 lines):
-                    var loadHandle = loader.LoadAsync(context.Source.Id);
+                 // IMPORTANT: In order to avoid deadlocking on the loader we use the following construct (next 2 lines):
+                 var loadHandle = loader.LoadAsync(context.Source.Id);
                  var result = await loadHandle;
 
                  return await result.ToConnection(context);
@@ -43,12 +45,26 @@
             Field(x => x.Id, type: typeof(IdGraphType)).Description("The unique identifier of the droid.");
             Field(x => x.Name).Description("The name of the droid.");
             Field(x => x.PrimaryFunction, nullable: true).Description("The primary function of the droid.");
-            Field<ListGraphType<EpisodeGType>>(nameof(Droid.AppearsIn), "Which movie they appear in.");
+            //Authorization on Field scope
+            Field<ListGraphType<EpisodeGType>>(nameof(Droid.AppearsIn), "Which movie they appear in.").AuthorizeWith(Constants.Policies.AdminPolicy);
 
             FieldAsync<ListGraphType<CharacterInterface>, List<Character>>(
             nameof(Droid.Friends),
             "The friends of the character, or an empty list if they have none.",
-            resolve: context => droidRepository.GetFriendsAsync(context.Source, context.CancellationToken));
+            resolve: context =>
+            {
+              //  var userContext = context.UserContext as GraphQLUserContext;
+              //  var authenticated = userContext.User?.Identity.IsAuthenticated ?? false;
+              //  if (userContext!=null && userContext.User.Claims.Any(x => x.Value.Equals("Admin")))
+              //  {
+              //          context.ReportError(new ValidationError(
+              //context.OriginalQuery,
+              //"auth-required",
+              //$"Authorization is required to access {op.Name}.",
+              //op));
+              //  }
+                return droidRepository.GetFriendsAsync(context.Source, context.CancellationToken);
+            });
 
             Interface<CharacterInterface>();
         }

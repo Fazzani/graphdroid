@@ -8,6 +8,8 @@
   <ItemGroup>
     <PackageReference Include="graphiql" Version="1.2.0" />
     <PackageReference Include="GraphQL" Version="2.4.0" />
+    <PackageReference Include="GraphQL.Authorization" Version="2.0.27" />
+    <PackageReference Include="GraphQL.Conventions" Version="2.0.1" />
     <PackageReference Include="GraphQL.Relay" Version="0.5.0" />
     <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="3.3.0" />
     <PackageReference Include="GraphQL.Server.Transports.WebSockets" Version="3.3.0" />

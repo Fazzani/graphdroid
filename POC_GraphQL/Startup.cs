@@ -1,6 +1,7 @@
 ﻿namespace POC_GraphQL
 {
     using GraphQL;
+    using GraphQL.Conventions;
     using GraphQL.DataLoader;
     using GraphQL.Http;
     using GraphQL.Relay.Types;
@@ -12,11 +13,13 @@
     using GraphQL.Validation;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Options;
+    using POC_GraphQL.Common;
     using POC_GraphQL.Queries;
     using POC_GraphQL.Repositories;
     using POC_GraphQL.Schemas;
@@ -45,13 +48,13 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<GraphQLOptions>(Configuration.GetSection(nameof(GraphQLOptions)));
-
-            var assembly = typeof(IHumanRepository).Assembly; // I actually use Assembly.LoadFile with well-known names 
+            services.AddSingleton<IDependencyInjector, Injector>();
+            var assembly = typeof(IHumanRepository).Assembly;
             RegisterRepositories(services, assembly);
             RegisterGraphQLTypes(services, assembly);
-
+            services.AddScoped<IUserContext, GraphQLUserContext>();
             //Adding GraphQL Relay services
             services.AddTransient(typeof(ConnectionType<>));
             services.AddTransient(typeof(EdgeType<>));
@@ -63,6 +66,7 @@
             services.AddSingleton<RootSubscription>();
             //Custom validation rules
             services.AddSingleton<IValidationRule, DebugValidationRule>();
+            services.AddSingleton<IValidationRule, RequiresAuthValidationRule>();
             //Adding DataLoader
             services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
             services.AddSingleton<DataLoaderDocumentListener>();
@@ -74,9 +78,19 @@
             services.AddSingleton(new MainSchema(new FuncDependencyResolver(type => sp.GetService(type))));
             services.AddSingleton<ISchema>(new MainSchema(new FuncDependencyResolver(type => sp.GetService(type))));
 
+            //Auth
+            // extension method defined in this project
+            services.AddGraphQLAuth(_ =>
+            {
+                _.AddPolicy(Constants.Policies.AdminPolicy, p => p.RequireClaim("role", Constants.Permissions.ADMIN));
+                _.AddPolicy(Constants.Policies.ViewerPolicy, p => p.RequireClaim("role", Constants.Permissions.READ_ONLY));
+            });
+
+            //GraphQL Configuration
             var graphqlOptions = sp.GetService<IOptionsMonitor<GraphQLOptions>>();
             services
                 .AddGraphQL(graphqlOptions.CurrentValue)
+                .AddUserContextBuilder(context => sp.GetService<IUserContext>())
                 .AddWebSockets() // Add required services for web socket support
                 .AddDataLoader(); // Add required services for DataLoader support;
         }
@@ -147,6 +161,5 @@
                 services.AddSingleton(type.GetInterface($"I{type.Name}"), type);
             }
         }
-
     }
 }

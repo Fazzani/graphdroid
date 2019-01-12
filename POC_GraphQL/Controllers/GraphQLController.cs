@@ -1,38 +1,71 @@
 ﻿namespace POC_GraphQL.Controllers
 {
     using GraphQL;
+    using GraphQL.Authorization;
+    using GraphQL.Conventions;
+    using GraphQL.Http;
     using GraphQL.Types;
+    using GraphQL.Validation;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using POC_GraphQL.Common;
+    using POC_GraphQL.Filters;
     using POC_GraphQL.Queries;
     using System;
+    using System.Linq;
+    using System.Net;
     using System.Threading.Tasks;
 
-    [Route("[controller]")]
+    [Route("[controller]"),
+        PrincipalActionFilter(Constants.Permissions.READ_ONLY)]
     public class GraphQLController : Controller
     {
-        private readonly IDocumentExecuter _documentExecuter;
         private readonly ISchema _schema;
-        readonly ILogger<GraphQLController> _logger;
-
-        public GraphQLController(ISchema schema, IDocumentExecuter documentExecuter, ILogger<GraphQLController> logger)
+        private readonly IDocumentExecuter _documentExecuter;
+        private readonly IDocumentWriter _documentWriter;
+        private readonly IUserContext _userContext;
+        private readonly ILoggerFactory _loggerFactory;
+        private readonly ILogger<GraphQLController> _logger;
+        private readonly IAuthorizationEvaluator _authorizationEvaluator;
+        private readonly IServiceProvider _serviceProvider;
+        public GraphQLController(ISchema schema,
+            IDocumentExecuter documentExecuter,
+            IDocumentWriter documentWriter,
+            IUserContext userContext,
+            ILoggerFactory logger,
+            IAuthorizationEvaluator authorizationEvaluator,
+            IServiceProvider serviceProvider)
         {
             _schema = schema;
             _documentExecuter = documentExecuter;
-            _logger = logger;
+            _loggerFactory = logger;
+            _logger = _loggerFactory.CreateLogger<GraphQLController>();
+            _userContext = userContext;
+            _documentWriter = documentWriter;
+            _authorizationEvaluator = authorizationEvaluator;
+            _serviceProvider = serviceProvider;
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] GraphQLQuery query)
         {
-            if (query == null) { throw new ArgumentNullException(nameof(query)); }
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
             var inputs = query.Variables.ToInputs();
             var executionOptions = new ExecutionOptions
             {
                 Schema = _schema,
                 Query = query.Query,
-                Inputs = inputs
+                Inputs = inputs,
+                UserContext = _userContext
             };
+
+            var validationRuleServices = _serviceProvider.GetServices<IValidationRule>();
+            executionOptions.ValidationRules = DocumentValidator.CoreRules().Concat(validationRuleServices);
 
             //Using middleware example
             executionOptions.FieldMiddleware.Use(next =>
@@ -46,12 +79,23 @@
 
             var result = await _documentExecuter.ExecuteAsync(executionOptions).ConfigureAwait(false);
 
-            if (result.Errors?.Count > 0)
+            HttpStatusCode statusCode = HttpStatusCode.OK;
+
+            if (result.Errors?.Any() ?? false)
             {
-                return BadRequest(result);
+                statusCode = HttpStatusCode.InternalServerError;
+                if (result.Errors.Any(x => x.Code == "VALIDATION_ERROR"))
+                    statusCode = HttpStatusCode.BadRequest;
+                else if (result.Errors.Any(x => x.Code == "UNAUTHORIZED_ACCESS"))
+                    statusCode = HttpStatusCode.Forbidden;
             }
 
-            return Ok(result);
+            return new ContentResult
+            {
+                Content = await _documentWriter.WriteToStringAsync(result),
+                ContentType = "application/json; charset=utf-8",
+                StatusCode = (int)statusCode
+            };
         }
     }
 }

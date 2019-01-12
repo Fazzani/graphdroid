@@ -10,14 +10,14 @@
 - [ ] Multi Sort
 - [ ] Batching and caching (DataLoader)
 - [ ] Tests unitaires/Tests d'intégration
-- [ ] Authentication/[Authorization][Graph_authorization] => [UserContext][UserContext]
+- [x] Authentication/[Authorization][Graph_authorization] => [UserContext][UserContext]
 - [ ] Perf/[Metrics][Metrics]
 
 ## Have to see
 
 - [Field middleware](https://graphql-dotnet.github.io/docs/getting-started/field-middleware)
 - [Ef with GraphQL](https://hackernoon.com/how-to-implement-generic-queries-by-combining-entityframework-core-and-graphql-net-77ac8faf4a22)
-
+- [GraphQL dotnet Conventions](https://medium.com/@whuysentruit/from-query-to-mutation-with-graphql-conventions-and-asp-net-core-87845f0a2fbd)
 ## Queries examples
 
 ```json
@@ -71,7 +71,10 @@ mutation CreateHuman($humanInput: HumanInput!) {
 # Filter using [System.Linq.Dynamic.Core](https://github.com/StefH/System.Linq.Dynamic.Core)
 
 {
-  humans(first: 2, filter: "name.ToLower().Contains(\"dar\") && name.Length > 2") {
+  humans(
+    first: 2
+    filter: "name.ToLower().Contains(\"dar\") && name.Length > 2"
+  ) {
     totalCount
     pageInfo {
       endCursor
@@ -81,6 +84,13 @@ mutation CreateHuman($humanInput: HumanInput!) {
       node {
         homePlanet
         name
+        friends {
+          name
+          friends {
+            appearsIn
+            name
+          }
+        }
       }
     }
   }
