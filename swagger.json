@@ -1,0 +1,6286 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "Synker API",
+    "description": "Synchronize playlists API 1.0.0.*",
+    "termsOfService": "None",
+    "contact": {
+      "name": "Synker",
+      "url": "https://www.github.com/fazzani/synker2",
+      "email": "contact@synker.ovh"
+    },
+    "license": {
+      "name": "Use under MIT",
+      "url": ""
+    }
+  },
+  "paths": {
+    "/api/v{version}/Auth/me": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Auth/token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "GetToken",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/AuthModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/v{version}/Auth/revoketoken": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "RevokeToken",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "tokenModel",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/TokenModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Register",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/RegisterModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/v{version}/Auth/reset": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Reset",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ResetModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/v{version}/Command": {
+      "get": {
+        "tags": [
+          "Command"
+        ],
+        "operationId": "GetCommand",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "all",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Command"
+        ],
+        "operationId": "PostCommand",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "command",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Command"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Command/users/{userId}": {
+      "get": {
+        "tags": [
+          "Command"
+        ],
+        "operationId": "GetCommandsByUser",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "all",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Command/{id}": {
+      "get": {
+        "tags": [
+          "Command"
+        ],
+        "operationId": "GetCommand",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Command"
+        ],
+        "operationId": "PutCommand",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "command",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Command"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "204": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Command"
+        ],
+        "operationId": "DeleteCommand",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Command/{id}/status/{status}": {
+      "put": {
+        "tags": [
+          "Command"
+        ],
+        "operationId": "PutCommandByStatus",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "none",
+              "treating",
+              "treated",
+              "fault",
+              "outdated"
+            ]
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Devices/search": {
+      "post": {
+        "tags": [
+          "Devices"
+        ],
+        "operationId": "List",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/QueryListBaseModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Devices": {
+      "post": {
+        "tags": [
+          "Devices"
+        ],
+        "operationId": "PostAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pushSubscription",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PushSubscriptionModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Devices/{id}": {
+      "delete": {
+        "tags": [
+          "Devices"
+        ],
+        "operationId": "DeleteAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Epg/_search": {
+      "post": {
+        "tags": [
+          "Epg"
+        ],
+        "operationId": "Search",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Epg/search": {
+      "post": {
+        "tags": [
+          "Epg"
+        ],
+        "operationId": "SearchAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/QueryListBaseModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/v{version}/Epg/{id}": {
+      "get": {
+        "tags": [
+          "Epg"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/v{version}/HealthCheck/{id}": {
+      "get": {
+        "tags": [
+          "HealthCheck"
+        ],
+        "operationId": "GetBy",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "webApi",
+              "database",
+              "elastic"
+            ]
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "HealthCheck"
+        ],
+        "operationId": "Index",
+        "consumes": [],
+        "produces": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/HealthCheck/error": {
+      "get": {
+        "tags": [
+          "HealthCheck"
+        ],
+        "operationId": "GetError",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/api/v{version}/Host/search": {
+      "post": {
+        "tags": [
+          "Host"
+        ],
+        "operationId": "List",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/QueryListBaseModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PagedResult[Host]"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Host/{id}": {
+      "get": {
+        "tags": [
+          "Host"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Host"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Host"
+        ],
+        "operationId": "Put",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "host",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Host"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Host"
+        ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Host"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Host": {
+      "post": {
+        "tags": [
+          "Host"
+        ],
+        "operationId": "Post",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "host",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Host"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/MediaServer/server": {
+      "get": {
+        "tags": [
+          "MediaServer"
+        ],
+        "operationId": "GetServerAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/MediaServer/streams": {
+      "get": {
+        "tags": [
+          "MediaServer"
+        ],
+        "operationId": "GetStreamsAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/MediaServer/live": {
+      "post": {
+        "tags": [
+          "MediaServer"
+        ],
+        "operationId": "PostLiveAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/MediaServerLivePost"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/MediaServer/stop": {
+      "post": {
+        "tags": [
+          "MediaServer"
+        ],
+        "operationId": "PostStopLiveAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/MediaServerLivePost"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/MediaServer/config": {
+      "get": {
+        "tags": [
+          "MediaServer"
+        ],
+        "operationId": "GetConfig",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/MediasRef/_search": {
+      "post": {
+        "tags": [
+          "MediasRef"
+        ],
+        "operationId": "SearchAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/MediasRef/_searchstring": {
+      "post": {
+        "tags": [
+          "MediasRef"
+        ],
+        "operationId": "SearchStringAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/SimpleQueryElastic"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/MediasRef/synk": {
+      "post": {
+        "tags": [
+          "MediasRef"
+        ],
+        "operationId": "SynkAsync",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/MediasRef/synkpicons": {
+      "post": {
+        "tags": [
+          "MediasRef"
+        ],
+        "operationId": "SynkPiconsAsync",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/MediasRef/{id}": {
+      "get": {
+        "tags": [
+          "MediasRef"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "MediasRef"
+        ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/MediasRef": {
+      "post": {
+        "tags": [
+          "MediasRef"
+        ],
+        "operationId": "Save",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "mediasRef",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MediaRef"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/MediasRef/merge": {
+      "post": {
+        "tags": [
+          "MediasRef"
+        ],
+        "operationId": "Merge",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/MediasRef/DeleteMany": {
+      "post": {
+        "tags": [
+          "MediasRef"
+        ],
+        "operationId": "DeleteMany",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/MediasRef/groups": {
+      "post": {
+        "tags": [
+          "MediasRef"
+        ],
+        "operationId": "GroupsAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ElasticQueryAggrRequest"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/MediasRef/cultures": {
+      "get": {
+        "tags": [
+          "MediasRef"
+        ],
+        "operationId": "CulturesAsync",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/MediasRef/sitepacks": {
+      "get": {
+        "tags": [
+          "MediasRef"
+        ],
+        "operationId": "SitePacksAsync",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Notification": {
+      "post": {
+        "tags": [
+          "Notification"
+        ],
+        "operationId": "Post",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "notification",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/NotificationModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Notification/webpush": {
+      "post": {
+        "tags": [
+          "Notification"
+        ],
+        "operationId": "PostWebPushAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "webPushModel",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/WebPushModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Notification/keys": {
+      "get": {
+        "tags": [
+          "Notification"
+        ],
+        "operationId": "GetKeysAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Notification/push": {
+      "post": {
+        "tags": [
+          "Notification"
+        ],
+        "operationId": "GetWebPushNotification",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "message",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/BorkerMessageModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Picons/_search": {
+      "post": {
+        "tags": [
+          "Picons"
+        ],
+        "operationId": "SearchAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Picons/_searchstring": {
+      "post": {
+        "tags": [
+          "Picons"
+        ],
+        "operationId": "SearchStringAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/SimpleQueryElastic"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Picons/{id}": {
+      "get": {
+        "tags": [
+          "Picons"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Picons/synk": {
+      "post": {
+        "tags": [
+          "Picons"
+        ],
+        "operationId": "Synk",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "reset",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Picons/match": {
+      "post": {
+        "tags": [
+          "Picons"
+        ],
+        "operationId": "Match",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "tvgmedias",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TvgMedia"
+              }
+            }
+          },
+          {
+            "name": "distance",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "default": 90
+          },
+          {
+            "name": "shouldMatchChannelNumber",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Picons/match/{mediaName}": {
+      "get": {
+        "tags": [
+          "Picons"
+        ],
+        "operationId": "Match",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "mediaName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/search": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "ListAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/QueryListBaseModel"
+            }
+          },
+          {
+            "name": "light",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PagedResult[PlaylistModel]"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/{id}": {
+      "get": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "GetAsync",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "light",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PlaylistModel"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "PutAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "playlist",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PlaylistModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Playlist"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/light/{id}": {
+      "put": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "PutLightAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "playlist",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PlaylistModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/handlers": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "ExecuteHandlers",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "tvgMedias",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TvgMedia"
+              }
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TvgMedia"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/synk": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "SynkAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "playlistPostModel",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PlaylistPostModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/diff": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "DiffAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "playlistPostModel",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PlaylistPostModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TvgMedia"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/matchfiltred/{id}": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "MatchFiltredByTvgSitesAsync",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "onlyNotMatched",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PlaylistModel"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/matchtvg/{id}": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "MatchTvgAsync",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "onlyNotMatched",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PlaylistModel"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/matchvideos/{id}": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "MatchVideosByPlaylistAsync",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "onlyNotMatched",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PlaylistModel"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/matchvideo/{name}": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "MatchVideoAsync",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/MediaInfo"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/matchvideos": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "MatchVideos",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "tvgmedias",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TvgMedia"
+              }
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TvgMedia"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/matchtvg/media": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "MatchTvgByMedia",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "media",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/TvgMedia"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/SitePackChannel"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/files/{publicId}": {
+      "get": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "GetFile",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "publicId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "m3u"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success",
+            "schema": {
+              "format": "byte",
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/create/{provider}": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "Import",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "playlistName",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "playlistUrl",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/create": {
+      "post": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "ImportFromUrl",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "playlistPostModel",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PlaylistPostModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/{id}/groups": {
+      "get": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "GetGroupsAsync",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PlaylistModel"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Playlists/{id}/groups/children": {
+      "get": {
+        "tags": [
+          "Playlists"
+        ],
+        "operationId": "GetChildrenGroupsAsync",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PlaylistModel"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack/_search": {
+      "post": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "SearchAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack/_searchstring": {
+      "post": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "SearchStringAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/SimpleQueryElastic"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack/{id}": {
+      "get": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "Put",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/SitePackChannel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack/save": {
+      "post": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "Save",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "sitepacks",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SitePackChannel"
+              }
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack/DeleteMany": {
+      "post": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "DeleteMany",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack": {
+      "delete": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack/tvgsites": {
+      "get": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "TvgSitesAsync",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack/sitepacks": {
+      "get": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "SitePacksAsync",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack/matchtvg/name/{mediaName}": {
+      "get": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "MatchTvgByMediaName",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "mediaName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack/countries": {
+      "get": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "CountriesAsync",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "SyncCountryAsync",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack/used": {
+      "get": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "GetAllFromPlaylistsAsync",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack/webgrabconfig": {
+      "post": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "WebgrabConfigBySitePackAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "sitePackUrl",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/SimpleModelPost"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/SitePack/synk/webgrab": {
+      "post": {
+        "tags": [
+          "SitePack"
+        ],
+        "operationId": "SynkAllSitePackToWebGrab",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v{version}/TvgMedia/_search": {
+      "post": {
+        "tags": [
+          "TvgMedia"
+        ],
+        "operationId": "SearchAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/TvgMedia/search": {
+      "post": {
+        "tags": [
+          "TvgMedia"
+        ],
+        "operationId": "SearchAsync",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/QueryListBaseModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/TvgMedia/{id}": {
+      "get": {
+        "tags": [
+          "TvgMedia"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/ModelStateEntry"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "TvgMedia"
+        ],
+        "operationId": "Put",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "value",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/TvgMedia"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TvgMedia"
+        ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/TvgMedia/matchtvg": {
+      "post": {
+        "tags": [
+          "TvgMedia"
+        ],
+        "operationId": "MatchTvg",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "matchTvgPostModel",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/MatchTvgPostModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/TvgMedia": {
+      "post": {
+        "tags": [
+          "TvgMedia"
+        ],
+        "operationId": "Post",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "value",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/TvgMedia"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Put",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "userModel",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "DeleteAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Me",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Put",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userModel",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Users/search": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "List",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/QueryListBaseModel"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PagedResult[User]"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Xtream/allepg/playlist/{playlistId}": {
+      "get": {
+        "tags": [
+          "Xtream"
+        ],
+        "operationId": "GetAllEpgAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Xtream/livecats/playlist/{playlistId}": {
+      "get": {
+        "tags": [
+          "Xtream"
+        ],
+        "operationId": "GetLiveCategoriesAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Xtream/livestreams/playlist/{playlistId}": {
+      "get": {
+        "tags": [
+          "Xtream"
+        ],
+        "operationId": "GetLiveStreamsAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Playlist"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Xtream/livestreams/playlist/{playlistId}/{catId}": {
+      "get": {
+        "tags": [
+          "Xtream"
+        ],
+        "operationId": "GetLiveStreamsByCategoriesAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "catId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Xtream/panel/playlist/{playlistId}": {
+      "get": {
+        "tags": [
+          "Xtream"
+        ],
+        "operationId": "GetPanelAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Xtream/panel/playlist/{playlistId}/{streamId}": {
+      "get": {
+        "tags": [
+          "Xtream"
+        ],
+        "operationId": "GetShortEpgForStreamAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "streamId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Xtream/infos/playlist/{playlistId}": {
+      "get": {
+        "tags": [
+          "Xtream"
+        ],
+        "operationId": "GetUserAndServerInfoAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Xtream/vods/playlist/{playlistId}": {
+      "get": {
+        "tags": [
+          "Xtream"
+        ],
+        "operationId": "GetVodStreamsAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v{version}/Xtream/xmltv/playlist/{playlistId}": {
+      "get": {
+        "tags": [
+          "Xtream"
+        ],
+        "operationId": "GetXmltvAsync",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "playlistId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AuthModel": {
+      "type": "object",
+      "properties": {
+        "userName": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        },
+        "grantType": {
+          "enum": [
+            "password",
+            "refreshToken"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "GrantType",
+            "modelAsString": true
+          }
+        }
+      }
+    },
+    "ProblemDetails": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "detail": {
+          "type": "string"
+        },
+        "instance": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "TokenModel": {
+      "required": [
+        "token"
+      ],
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "RegisterModel": {
+      "required": [
+        "firstName",
+        "lastName",
+        "email",
+        "roles",
+        "password",
+        "userName"
+      ],
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "maxLength": 64,
+          "type": "string"
+        },
+        "lastName": {
+          "maxLength": 64,
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "photo": {
+          "type": "string"
+        },
+        "birthDay": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "gender": {
+          "enum": [
+            "mr",
+            "mrs"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "GenderTypeEnum",
+            "modelAsString": true
+          }
+        },
+        "roles": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Role"
+          }
+        },
+        "password": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "entity": {
+          "$ref": "#/definitions/User",
+          "readOnly": true
+        }
+      }
+    },
+    "Role": {
+      "required": [
+        "name"
+      ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "maxLength": 32,
+          "type": "string"
+        },
+        "userRoles": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserRole"
+          }
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "required": [
+        "firstName",
+        "lastName",
+        "email"
+      ],
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "maxLength": 64,
+          "type": "string"
+        },
+        "lastName": {
+          "maxLength": 64,
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "email": {
+          "type": "string"
+        },
+        "photo": {
+          "type": "string"
+        },
+        "birthDay": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "gender": {
+          "enum": [
+            "mr",
+            "mrs"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "GenderTypeEnum",
+            "modelAsString": true
+          }
+        },
+        "connectionStateId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "connectionState": {
+          "$ref": "#/definitions/ConnectionState"
+        },
+        "userRoles": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserRole"
+          }
+        },
+        "commands": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Command"
+          }
+        },
+        "playlists": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Playlist"
+          }
+        },
+        "devices": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Device"
+          }
+        },
+        "roles": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "readOnly": true
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "UserRole": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "roleId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "role": {
+          "$ref": "#/definitions/Role"
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "ConnectionState": {
+      "required": [
+        "userName",
+        "password"
+      ],
+      "type": "object",
+      "properties": {
+        "userName": {
+          "maxLength": 512,
+          "type": "string"
+        },
+        "password": {
+          "maxLength": 512,
+          "type": "string"
+        },
+        "lastConnection": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "refreshToken": {
+          "maxLength": 255,
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "disabled": {
+          "type": "boolean"
+        },
+        "approved": {
+          "type": "boolean"
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Command": {
+      "required": [
+        "commandText"
+      ],
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "userId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "commandText": {
+          "type": "string"
+        },
+        "treatedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "treatingDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "comments": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "none",
+            "treating",
+            "treated",
+            "fault",
+            "outdated"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "CommandStatusEnum",
+            "modelAsString": true
+          }
+        },
+        "priority": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "interpreter": {
+          "enum": [
+            "shell"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "CommandInterpreter",
+            "modelAsString": true
+          }
+        },
+        "replayCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "commandExecutingType": {
+          "enum": [
+            "default",
+            "cron"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "CommandExecutingType",
+            "modelAsString": true
+          }
+        },
+        "cron": {
+          "type": "string"
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Playlist": {
+      "required": [
+        "uniqueId",
+        "freindlyname",
+        "tvgSitesString"
+      ],
+      "type": "object",
+      "properties": {
+        "_tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "uniqueId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "userId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "freindlyname": {
+          "maxLength": 100,
+          "type": "string"
+        },
+        "synkConfig": {
+          "$ref": "#/definitions/SynkConfig"
+        },
+        "status": {
+          "enum": [
+            "enabled",
+            "disabled"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "PlaylistStatus",
+            "modelAsString": true
+          }
+        },
+        "tvgMedias": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TvgMedia"
+          }
+        },
+        "medias": {
+          "type": "string"
+        },
+        "tagsString": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "tvgSites": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tvgSitesString": {
+          "type": "string"
+        },
+        "favorite": {
+          "type": "boolean"
+        },
+        "isSynchronizable": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isXtreamTag": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "importProviderTag": {
+          "type": "string",
+          "readOnly": true
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Device": {
+      "required": [
+        "name",
+        "pushEndpoint",
+        "pushP256DH",
+        "pushAuth"
+      ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "pushEndpoint": {
+          "type": "string"
+        },
+        "pushP256DH": {
+          "type": "string"
+        },
+        "pushAuth": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "userId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "SynkConfig": {
+      "type": "object",
+      "properties": {
+        "synkLogos": {
+          "type": "boolean"
+        },
+        "synkEpg": {
+          "type": "boolean"
+        },
+        "synkGroup": {
+          "enum": [
+            "none",
+            "byCountry",
+            "byLanguage",
+            "custom"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "SynkGroupEnum",
+            "modelAsString": true
+          }
+        },
+        "cleanName": {
+          "type": "boolean"
+        },
+        "url": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string",
+          "readOnly": true
+        },
+        "provider": {
+          "type": "string"
+        },
+        "notifcationTypeInsertedMedia": {
+          "enum": [
+            "pushBrowser",
+            "pushMobile",
+            "email",
+            "sms"
+          ],
+          "type": "string"
+        },
+        "autoSynchronize": {
+          "type": "boolean"
+        }
+      }
+    },
+    "TvgMedia": {
+      "required": [
+        "name",
+        "displayName",
+        "url"
+      ],
+      "type": "object",
+      "properties": {
+        "streamId": {
+          "type": "string"
+        },
+        "culture": {
+          "$ref": "#/definitions/Culture"
+        },
+        "tvg": {
+          "$ref": "#/definitions/Tvg"
+        },
+        "id": {
+          "type": "string"
+        },
+        "isValid": {
+          "type": "boolean"
+        },
+        "startLineHeader": {
+          "type": "string"
+        },
+        "lang": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "position": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "url": {
+          "type": "string"
+        },
+        "tags": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "mediaType": {
+          "enum": [
+            "liveTv",
+            "radio",
+            "video",
+            "audio",
+            "other"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "MediaType",
+            "modelAsString": true
+          }
+        },
+        "mediaGroup": {
+          "$ref": "#/definitions/MediaGroup"
+        },
+        "group": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "Culture": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "Tvg": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tvgIdentify": {
+          "type": "string"
+        },
+        "shift": {
+          "type": "string"
+        },
+        "audio_track": {
+          "type": "string"
+        },
+        "aspect_ratio": {
+          "type": "string"
+        },
+        "tvgSiteSource": {
+          "type": "string"
+        },
+        "tvgSource": {
+          "$ref": "#/definitions/TvgSource"
+        }
+      }
+    },
+    "MediaGroup": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "disabled": {
+          "type": "boolean"
+        },
+        "position": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "matchingMediaPattern": {
+          "type": "string"
+        }
+      }
+    },
+    "TvgSource": {
+      "type": "object",
+      "properties": {
+        "site": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "ResetModel": {
+      "required": [
+        "password",
+        "newPassword",
+        "userName"
+      ],
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        }
+      }
+    },
+    "QueryListBaseModel": {
+      "type": "object",
+      "properties": {
+        "searchDict": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "sortDict": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "type": "string",
+            "x-ms-enum": {
+              "name": "SortDirectionEnum",
+              "modelAsString": true
+            }
+          }
+        },
+        "pageNumber": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "pageSize": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "skip": {
+          "format": "int32",
+          "type": "integer",
+          "readOnly": true
+        },
+        "getAll": {
+          "type": "boolean"
+        }
+      }
+    },
+    "PushSubscriptionModel": {
+      "required": [
+        "endPoint",
+        "keys"
+      ],
+      "type": "object",
+      "properties": {
+        "endPoint": {
+          "type": "string"
+        },
+        "expirationTime": {
+          "type": "string"
+        },
+        "keys": {
+          "$ref": "#/definitions/Keys"
+        }
+      }
+    },
+    "Keys": {
+      "required": [
+        "auth",
+        "p256dh"
+      ],
+      "type": "object",
+      "properties": {
+        "auth": {
+          "type": "string"
+        },
+        "p256dh": {
+          "type": "string"
+        }
+      }
+    },
+    "PagedResult[Host]": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Host"
+          }
+        },
+        "currentPage": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "pageCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "pageSize": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "rowCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "firstRowOnPage": {
+          "format": "int32",
+          "type": "integer",
+          "readOnly": true
+        },
+        "lastRowOnPage": {
+          "format": "int32",
+          "type": "integer",
+          "readOnly": true
+        }
+      }
+    },
+    "Host": {
+      "required": [
+        "name",
+        "address"
+      ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "authentication": {
+          "$ref": "#/definitions/Authentication"
+        },
+        "port": {
+          "type": "string"
+        },
+        "addressUri": {
+          "type": "string",
+          "readOnly": true
+        },
+        "comments": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "webGrabConfigDockers": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WebGrabConfigDocker"
+          }
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Authentication": {
+      "type": "object",
+      "properties": {
+        "certPath": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "WebGrabConfigDocker": {
+      "required": [
+        "dockerImage",
+        "webgrabConfigUrl",
+        "cron"
+      ],
+      "type": "object",
+      "properties": {
+        "mountSourcePath": {
+          "type": "string"
+        },
+        "dockerImage": {
+          "type": "string"
+        },
+        "webgrabConfigUrl": {
+          "type": "string"
+        },
+        "runnableHost": {
+          "$ref": "#/definitions/Host"
+        },
+        "hostId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "cron": {
+          "type": "string"
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "MediaServerLivePost": {
+      "required": [
+        "stream"
+      ],
+      "type": "object",
+      "properties": {
+        "stream": {
+          "type": "string"
+        }
+      }
+    },
+    "SimpleQueryElastic": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "size": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "query": {
+          "type": "string"
+        },
+        "indexName": {
+          "type": "string"
+        }
+      }
+    },
+    "MediaRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "defaultSite": {
+          "type": "string"
+        },
+        "displayNames": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tvg": {
+          "$ref": "#/definitions/Tvg"
+        },
+        "groups": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cultures": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mediaType": {
+          "type": "string"
+        }
+      }
+    },
+    "ElasticQueryAggrRequest": {
+      "type": "object",
+      "properties": {
+        "filter": {
+          "type": "string"
+        },
+        "size": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "NotificationModel": {
+      "type": "object",
+      "properties": {
+        "notificationType": {
+          "enum": [
+            "email",
+            "sms",
+            "pushBrowser",
+            "pushMobile"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "NotificationTypeEnum",
+            "modelAsString": true
+          }
+        },
+        "body": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "cci": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cc": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fromDisplayName": {
+          "type": "string"
+        },
+        "isBodyHtml": {
+          "type": "boolean"
+        }
+      }
+    },
+    "WebPushModel": {
+      "required": [
+        "id",
+        "payload"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "payload": {
+          "type": "string"
+        }
+      }
+    },
+    "BorkerMessageModel": {
+      "required": [
+        "id",
+        "message"
+      ],
+      "type": "object",
+      "properties": {
+        "brokerMessageType": {
+          "enum": [
+            "exception",
+            "playlistDiff"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "BrokerMessageType",
+            "modelAsString": true
+          }
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "target": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "extra": {
+          "type": "object"
+        }
+      }
+    },
+    "PagedResult[PlaylistModel]": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PlaylistModel"
+          }
+        },
+        "currentPage": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "pageCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "pageSize": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "rowCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "firstRowOnPage": {
+          "format": "int32",
+          "type": "integer",
+          "readOnly": true
+        },
+        "lastRowOnPage": {
+          "format": "int32",
+          "type": "integer",
+          "readOnly": true
+        }
+      }
+    },
+    "PlaylistModel": {
+      "required": [
+        "freindlyname"
+      ],
+      "type": "object",
+      "properties": {
+        "userId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "freindlyname": {
+          "maxLength": 100,
+          "type": "string"
+        },
+        "cron": {
+          "maxLength": 10,
+          "pattern": "(28|\\*) (2|\\*) (7|\\*) (1|\\*) (1|\\*)",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "enabled",
+            "disabled"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "PlaylistStatus",
+            "modelAsString": true
+          }
+        },
+        "tvgMedias": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TvgMedia"
+          }
+        },
+        "url": {
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "type": "string",
+          "readOnly": true
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "type": "string",
+          "readOnly": true
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uniqueId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "synkEpg": {
+          "type": "boolean"
+        },
+        "synkGroup": {
+          "enum": [
+            "none",
+            "byCountry",
+            "byLanguage",
+            "custom"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "SynkGroupEnum",
+            "modelAsString": true
+          }
+        },
+        "synkLogos": {
+          "type": "boolean"
+        },
+        "tvgSites": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "notifcationTypeInsertedMedia": {
+          "enum": [
+            "pushBrowser",
+            "pushMobile",
+            "email",
+            "sms"
+          ],
+          "type": "string"
+        },
+        "publicId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "publicUrl": {
+          "type": "string",
+          "readOnly": true
+        },
+        "isXtream": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "importProvider": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "PlaylistPostModel": {
+      "required": [
+        "provider",
+        "url",
+        "freindlyname"
+      ],
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "freindlyname": {
+          "maxLength": 100,
+          "type": "string"
+        },
+        "cron": {
+          "maxLength": 20,
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "enabled",
+            "disabled"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "PlaylistStatus",
+            "modelAsString": true
+          }
+        },
+        "synkEpg": {
+          "type": "boolean"
+        },
+        "synkLogos": {
+          "type": "boolean"
+        },
+        "synkGroup": {
+          "enum": [
+            "none",
+            "byCountry",
+            "byLanguage",
+            "custom"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "SynkGroupEnum",
+            "modelAsString": true
+          }
+        },
+        "save": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MediaInfo": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "posterPath": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "releaseDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "originalName": {
+          "type": "string"
+        },
+        "mediaType": {
+          "enum": [
+            "unknown",
+            "movie",
+            "tv",
+            "person"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "MediaType",
+            "modelAsString": true
+          }
+        }
+      }
+    },
+    "SitePackChannel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "update": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "site_id": {
+          "type": "string"
+        },
+        "xmltv_id": {
+          "type": "string"
+        },
+        "channel_name": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        },
+        "displayNames": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mediaType": {
+          "enum": [
+            "channel",
+            "radio"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "SitePackMediaTypes",
+            "modelAsString": true
+          }
+        }
+      }
+    },
+    "SimpleModelPost": {
+      "required": [
+        "value"
+      ],
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "ModelStateEntry": {
+      "type": "object",
+      "properties": {
+        "rawValue": {
+          "type": "object"
+        },
+        "attemptedValue": {
+          "type": "string"
+        },
+        "errors": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ModelError"
+          },
+          "readOnly": true
+        },
+        "validationState": {
+          "enum": [
+            "unvalidated",
+            "invalid",
+            "valid",
+            "skipped"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "ModelValidationState",
+            "modelAsString": true
+          }
+        },
+        "isContainerNode": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "children": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ModelStateEntry"
+          },
+          "readOnly": true
+        }
+      }
+    },
+    "ModelError": {
+      "type": "object",
+      "properties": {
+        "exception": {
+          "type": "object",
+          "readOnly": true
+        },
+        "errorMessage": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "MatchTvgPostModel": {
+      "required": [
+        "mediaName",
+        "overrideTvg",
+        "minScore"
+      ],
+      "type": "object",
+      "properties": {
+        "mediaName": {
+          "type": "string"
+        },
+        "tvgSites": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "country": {
+          "type": "string"
+        },
+        "overrideTvg": {
+          "type": "boolean"
+        },
+        "minScore": {
+          "format": "double",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        }
+      }
+    },
+    "PagedResult[User]": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        },
+        "currentPage": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "pageCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "pageSize": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "rowCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "firstRowOnPage": {
+          "format": "int32",
+          "type": "integer",
+          "readOnly": true
+        },
+        "lastRowOnPage": {
+          "format": "int32",
+          "type": "integer",
+          "readOnly": true
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "name": "Authorization",
+      "in": "header",
+      "type": "apiKey",
+      "description": "Please insert JWT with Bearer into field"
+    },
+    "Basic": {
+      "type": "basic",
+      "description": "Please insert username/password into fields"
+    }
+  }
+}
