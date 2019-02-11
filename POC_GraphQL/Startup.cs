@@ -1,5 +1,6 @@
 ﻿namespace POC_GraphQL
 {
+    using global::Common;
     using GraphQL;
     using GraphQL.Conventions;
     using GraphQL.DataLoader;
@@ -11,6 +12,7 @@
     using GraphQL.Types;
     using GraphQL.Types.Relay;
     using GraphQL.Validation;
+    using IdentityServer4.AccessTokenValidation;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -93,6 +95,21 @@
                 .AddUserContextBuilder(context => sp.GetService<IUserContext>())
                 .AddWebSockets() // Add required services for web socket support
                 .AddDataLoader(); // Add required services for DataLoader support;
+
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                opt.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+            })
+           .AddIdentityServerAuthentication(
+                opt =>
+                {
+                    opt.Authority = "http://identityserver";
+                    opt.RequireHttpsMetadata = false;
+                    opt.ApiName = "graphqlApi";
+                });
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -107,6 +124,12 @@
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseCors(
+                builder => builder
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins("http://localhost:53374", "https://localhost:44363"));
 
             // this is required for websockets support
             app.UseWebSockets();
@@ -130,6 +153,8 @@
             app.UseGraphQLVoyager(new GraphQLVoyagerOptions());
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
+
             app.UseMvc();
         }
 

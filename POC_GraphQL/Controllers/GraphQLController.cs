@@ -1,5 +1,6 @@
 ﻿namespace POC_GraphQL.Controllers
 {
+    using global::Common;
     using GraphQL;
     using GraphQL.Authorization;
     using GraphQL.Conventions;

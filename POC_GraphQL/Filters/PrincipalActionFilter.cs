@@ -1,5 +1,6 @@
 ﻿namespace POC_GraphQL.Filters
 {
+    using global::Common;
     using Microsoft.AspNetCore.Mvc.Filters;
     using POC_GraphQL.Common;
     using System.Collections.Generic;

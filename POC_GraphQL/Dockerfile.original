@@ -1,0 +1,20 @@
+FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM microsoft/dotnet:2.2-sdk AS build
+WORKDIR /src
+COPY ["POC_GraphQL/POC_GraphQL.csproj", "POC_GraphQL/"]
+RUN dotnet restore "POC_GraphQL/POC_GraphQL.csproj"
+COPY . .
+WORKDIR "/src/POC_GraphQL"
+RUN dotnet build "POC_GraphQL.csproj" -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish "POC_GraphQL.csproj" -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "POC_GraphQL.dll"]
