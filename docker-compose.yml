@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  poc_graphql:
+    image: ${DOCKER_REGISTRY-}pocgraphql
+    build:
+      context: .
+      dockerfile: POC_GraphQL/Dockerfile
+  identityserver:
+    image: ${DOCKER_REGISTRY-}identityserver
+    build:
+      context: .
+      dockerfile: IdentityServer/Dockerfile

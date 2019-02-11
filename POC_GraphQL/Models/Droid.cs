@@ -11,6 +11,7 @@
     using System.Linq;
     using GraphQL.Validation;
     using GraphQL.Authorization;
+    using global::Common;
 
     public class Droid : Character
     {

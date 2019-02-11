@@ -1,4 +1,4 @@
-﻿namespace POC_GraphQL.Common
+﻿namespace Common
 {
     public class Constants
     {

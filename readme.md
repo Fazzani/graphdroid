@@ -133,6 +133,10 @@ query droit_pagination($first:Int){
   - under fetching: est le fait de devoir faire plusieurs appels à l'API pour compléter la réponse de notre premier appel qui ne contient pas assez d'informations
 - automatic introspection et documentation
 
+## Authentication && authorization
+
+- On ce qui concerne l'authentifications et l'authorisations, elles sont gérées au même que la validation des requêtes. [example][example_auth]
+
 ## References
 
 - [Official Documentation](https://graphql.org/learn)
@@ -146,3 +150,4 @@ query droit_pagination($first:Int){
 [graphqlclientside]:https://blog.hasura.io/client-side-graphql-schema-resolving-and-schema-stitching-f4d8bccc42d2
 [restgraphqlwrapper]:https://graphql.org/blog/rest-api-graphql-wrapper/
 [codegenerator]:https://medium.com/the-guild/graphql-code-generator-a34e3785e6fb
+[example_auth]:POC_GraphQL\ValidationRules\RequiresAuthValidationRule.cs

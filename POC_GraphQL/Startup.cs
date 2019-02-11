@@ -1,5 +1,6 @@
 ﻿namespace POC_GraphQL
 {
+    using global::Common;
     using GraphQL;
     using GraphQL.Conventions;
     using GraphQL.DataLoader;
@@ -11,6 +12,9 @@
     using GraphQL.Types;
     using GraphQL.Types.Relay;
     using GraphQL.Validation;
+    using IdentityModel;
+    using IdentityServer4.AccessTokenValidation;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -93,6 +97,24 @@
                 .AddUserContextBuilder(context => sp.GetService<IUserContext>())
                 .AddWebSockets() // Add required services for web socket support
                 .AddDataLoader(); // Add required services for DataLoader support;
+
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            //    .AddJwtBearer(o =>
+            //{
+            //    o.Authority = "http://identityserver";
+            //    o.Audience = "graphqlApi";
+            //    o.RequireHttpsMetadata = false;
+            //})
+           .AddIdentityServerAuthentication(
+                opt =>
+                {
+                    opt.Authority = "http://identityserver";
+                    opt.RequireHttpsMetadata = false;
+                    opt.ApiSecret = "graphQLsecret".ToSha256();
+                    opt.ApiName = "graphqlApi";
+                });
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -108,14 +130,21 @@
                 app.UseHsts();
             }
 
+            app.UseCors(
+                builder => builder
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins("http://localhost:53374", "https://localhost:44363"));
+
             // this is required for websockets support
             app.UseWebSockets();
 
-            // use websocket middleware for ChatSchema at path /graphql
-            app.UseGraphQLWebSockets<MainSchema>("/graphql");
-
             // use HTTP middleware for MainSchema at path /graphql
             //app.UseGraphQL<MainSchema>("/graphql");
+            app.UseAuthentication();
+
+            // use websocket middleware for ChatSchema at path /graphql
+            app.UseGraphQLWebSockets<MainSchema>("/graphql");
 
             // use graphiQL middleware at default url /graphiql
             //app.UseGraphiQLServer(new GraphiQLOptions());
@@ -130,6 +159,7 @@
             app.UseGraphQLVoyager(new GraphQLVoyagerOptions());
 
             app.UseHttpsRedirection();
+
             app.UseMvc();
         }
 

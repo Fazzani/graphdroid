@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  poc_graphql:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "53373:80"
+      - "44362:443"
+    volumes:
+      - "./:/root/.aspnet/https:ro"
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+  identityserver:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "53374:80"
+      - "44363:443"
+    volumes:
+      - "./:/root/.aspnet/https:ro"
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
