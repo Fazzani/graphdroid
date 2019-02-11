@@ -12,6 +12,12 @@
     [Authorize]
     public class ValuesController : ControllerBase
     {
+        [HttpGet("claims")]
+        public IActionResult GetClaims()
+        {
+            return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()

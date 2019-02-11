@@ -22,8 +22,12 @@
             {
                 ClientId = "graphqlApi",
                 Claims = {
-                    new Claim("role", Common.Constants.Policies.AdminPolicy),
-                    new Claim("Id", "1")},
+                    new Claim(ClaimTypes.Role, Common.Constants.Permissions.ADMIN),
+                    new Claim(ClaimTypes.Sid, "1"),
+                    new Claim(ClaimTypes.Surname, "Eric"),
+                    new Claim(ClaimTypes.Country, "France"),
+                    new Claim(ClaimTypes.Email, "eric@seloger.com"),
+                    new Claim(ClaimTypes.GivenName, "Eric") },
                 // no interactive user, use the clientid/secret for authentication
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
 
@@ -43,8 +47,12 @@
             {
                 ClientId = "graphqlApiViewer",
                 Claims = {
-                    new Claim("role", Common.Constants.Policies.ViewerPolicy),
-                    new Claim("Id", "2")},
+                      new Claim(ClaimTypes.Role, Common.Constants.Permissions.READ_ONLY),
+                    new Claim(ClaimTypes.Sid, "2"),
+                    new Claim(ClaimTypes.Surname, "Mat"),
+                    new Claim(ClaimTypes.Country, "USA"),
+                    new Claim(ClaimTypes.Email, "mat@google.com"),
+                    new Claim(ClaimTypes.GivenName, "Matt")},
                 // no interactive user, use the clientid/secret for authentication
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
 
@@ -55,7 +63,7 @@
                 },
 
                 // scopes that client has access to
-                AllowedScopes = { "graphqlApiViewer" },
+                AllowedScopes = { "graphqlApi" },
                 AllowedCorsOrigins = new[] {
                     "http://localhost:53373",
                     "https://localhost:44362" }

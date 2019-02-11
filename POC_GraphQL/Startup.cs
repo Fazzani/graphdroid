@@ -12,7 +12,9 @@
     using GraphQL.Types;
     using GraphQL.Types.Relay;
     using GraphQL.Validation;
+    using IdentityModel;
     using IdentityServer4.AccessTokenValidation;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -96,16 +98,19 @@
                 .AddWebSockets() // Add required services for web socket support
                 .AddDataLoader(); // Add required services for DataLoader support;
 
-            services.AddAuthentication(opt =>
-            {
-                opt.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-                opt.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-            })
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            //    .AddJwtBearer(o =>
+            //{
+            //    o.Authority = "http://identityserver";
+            //    o.Audience = "graphqlApi";
+            //    o.RequireHttpsMetadata = false;
+            //})
            .AddIdentityServerAuthentication(
                 opt =>
                 {
                     opt.Authority = "http://identityserver";
                     opt.RequireHttpsMetadata = false;
+                    opt.ApiSecret = "graphQLsecret".ToSha256();
                     opt.ApiName = "graphqlApi";
                 });
 
@@ -134,11 +139,12 @@
             // this is required for websockets support
             app.UseWebSockets();
 
-            // use websocket middleware for ChatSchema at path /graphql
-            app.UseGraphQLWebSockets<MainSchema>("/graphql");
-
             // use HTTP middleware for MainSchema at path /graphql
             //app.UseGraphQL<MainSchema>("/graphql");
+            app.UseAuthentication();
+
+            // use websocket middleware for ChatSchema at path /graphql
+            app.UseGraphQLWebSockets<MainSchema>("/graphql");
 
             // use graphiQL middleware at default url /graphiql
             //app.UseGraphiQLServer(new GraphiQLOptions());
@@ -153,7 +159,6 @@
             app.UseGraphQLVoyager(new GraphQLVoyagerOptions());
 
             app.UseHttpsRedirection();
-            app.UseAuthentication();
 
             app.UseMvc();
         }

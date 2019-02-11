@@ -4,6 +4,7 @@
     using GraphQL.Conventions;
     using Microsoft.AspNetCore.Mvc.Filters;
     using POC_GraphQL.Common;
+    using System;
     using System.Security.Claims;
     using System.Threading.Tasks;
     public class PrincipalActionFilterAttribute : ActionFilterAttribute
@@ -16,12 +17,17 @@
 
         public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var userIdentity = PrincipalActionFilter.GetPrincipal();
             var userContext = context.HttpContext.RequestServices.GetService(typeof(IUserContext)) as GraphQLUserContext;
 
-            userContext.User = context.HttpContext.User = new ClaimsPrincipal(userIdentity);
-            
+            //Mock authentification
+            //var userIdentity = PrincipalActionFilter.GetPrincipal();
+            //userContext.User = context.HttpContext.User = new ClaimsPrincipal(userIdentity);
+
+            //JWT authentification
+            userContext.User = context.HttpContext.User; 
+
             return base.OnActionExecutionAsync(context, next);
         }
+
     }
 }

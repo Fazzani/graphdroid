@@ -7,6 +7,7 @@
     using GraphQL.Http;
     using GraphQL.Types;
     using GraphQL.Validation;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -19,7 +20,8 @@
     using System.Threading.Tasks;
 
     [Route("[controller]"),
-        PrincipalActionFilter(Constants.Permissions.READ_ONLY)]
+     PrincipalActionFilter(Constants.Permissions.READ_ONLY), 
+     Authorize]
     public class GraphQLController : Controller
     {
         private readonly ISchema _schema;
@@ -28,14 +30,12 @@
         private readonly IUserContext _userContext;
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<GraphQLController> _logger;
-        private readonly IAuthorizationEvaluator _authorizationEvaluator;
         private readonly IServiceProvider _serviceProvider;
         public GraphQLController(ISchema schema,
             IDocumentExecuter documentExecuter,
             IDocumentWriter documentWriter,
             IUserContext userContext,
             ILoggerFactory logger,
-            IAuthorizationEvaluator authorizationEvaluator,
             IServiceProvider serviceProvider)
         {
             _schema = schema;
@@ -44,7 +44,6 @@
             _logger = _loggerFactory.CreateLogger<GraphQLController>();
             _userContext = userContext;
             _documentWriter = documentWriter;
-            _authorizationEvaluator = authorizationEvaluator;
             _serviceProvider = serviceProvider;
         }
 
