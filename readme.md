@@ -26,7 +26,7 @@
 
 ## Queries examples
 
-```json
+```graphql
 {
   __schema {
     types {
