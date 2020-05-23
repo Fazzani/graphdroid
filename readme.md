@@ -1,5 +1,7 @@
 # GraphQL POC DROID
 
+![.NET Core](https://github.com/Fazzani/graphdroid/workflows/.NET%20Core/badge.svg?branch=master)
+
 ## To explore
 
 - [x] Relay => Pagination/Cursor/Connection
